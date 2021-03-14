@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/SpawnManager.gd" type="Script" id=1]
+
+
+[node name="SpawnManager" type="Node2D"]
+position = Vector2( 672.717, 277.496 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[node name="BallDuplicate" type="Node" parent="."]
+
+[node name="PowerUps" type="Node" parent="."]
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]

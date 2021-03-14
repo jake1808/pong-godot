@@ -1,0 +1,123 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/opponent.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Ball.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scripts/Level.gd" type="Script" id=4]
+[ext_resource path="res://Assets/font/PressStart2P-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://Assets/sounds/ping_pong_8bit_plop.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Assets/sounds/countdown.wav" type="AudioStream" id=8]
+[ext_resource path="res://Scenes/SpawnManager.tscn" type="PackedScene" id=9]
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 50
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 5 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 639.612, 10 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 10, 11.4142 )
+
+[node name="Level" type="Node"]
+script = ExtResource( 4 )
+
+[node name="Opponent" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1254.07, 327.624 )
+
+[node name="PlayerScore" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -307.0
+margin_top = 12.0
+margin_bottom = -4.0
+custom_fonts/font = SubResource( 1 )
+text = "0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OpponentScore" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 200.0
+margin_top = 12.0
+margin_right = 87.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimerLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 0.677
+margin_top = 11.0
+margin_bottom = 0.559998
+custom_fonts/font = SubResource( 3 )
+text = "timer"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 22.0455, 338.183 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="topwall" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 640.388, -10 )
+shape = SubResource( 4 )
+
+[node name="BottomWall" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 642.322, 730 )
+shape = SubResource( 4 )
+
+[node name="Ball" parent="." instance=ExtResource( 3 )]
+position = Vector2( 638.962, 398.605 )
+
+[node name="LeftWall" type="Area2D" parent="."]
+
+[node name="LeftWall" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2( -47.5117, 371.145 )
+scale = Vector2( 3.52, 35.56 )
+shape = SubResource( 5 )
+
+[node name="RightWall" type="Area2D" parent="."]
+
+[node name="RightWall" type="CollisionShape2D" parent="RightWall"]
+position = Vector2( 1321.06, 360.286 )
+scale = Vector2( 3, 35.56 )
+shape = SubResource( 5 )
+
+[node name="CountdownTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="CountDownSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+attenuation = 0.258816
+
+[node name="SpawnManager" parent="." instance=ExtResource( 9 )]
+position = Vector2( 644.126, 346.449 )
+[connection signal="body_entered" from="LeftWall" to="." method="_on_LeftWall_body_entered"]
+[connection signal="body_entered" from="RightWall" to="." method="_on_RightWall_body_entered"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_CountdownTimer_timeout"]
